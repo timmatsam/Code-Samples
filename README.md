@@ -1,14 +1,8 @@
-# Code-Samples
-
-<h1>This is a code sample from my ecommerce website project.</h1>
+<h3>This is a code sample from my ecommerce website project.</h3>
 
 ```js
 router.get('/', async (req, res) => {
   try {
-    // const order = await Order.findOne({where: {isOrder: false}})
-    // const {id} = order
-    // const cart = await Order_Product.findAll({where: {OrderId: id}})
-    console.log(req.user.id)
     const cart = await Order.findOne({
       where: {isOrder: false, userId: req.user.id},
       include: Product
@@ -93,7 +87,6 @@ router.put('/updateQuantity/:productId', async (req, res) => {
       where: {ProductId: productId, OrderId: order.id}
     })
     if (increment) {
-      console.log(productInCart.quantity)
       productInCart.quantity += 1
       productInCart.price += price
 
@@ -114,14 +107,11 @@ router.put('/updateQuantity/:productId', async (req, res) => {
 
 //create an error handler incase a cart doesn't exist
 router.get('/checkout', async (req, res) => {
-  //receiving an error when using put instead of get
   try {
     const orderToBeCheckedOut = await Order.findOne({
       where: {isOrder: false, userId: req.user.id},
       include: Product
     })
-
-    console.log(orderToBeCheckedOut)
 
     if (orderToBeCheckedOut.Products.length > 0) {
       orderToBeCheckedOut.isOrder = true
