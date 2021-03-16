@@ -105,7 +105,6 @@ router.put('/updateQuantity/:productId', async (req, res) => {
   }
 })
 
-//create an error handler incase a cart doesn't exist
 router.get('/checkout', async (req, res) => {
   try {
     const orderToBeCheckedOut = await Order.findOne({
@@ -122,4 +121,4 @@ router.get('/checkout', async (req, res) => {
   } catch (error) {
     res.sendStatus(error)
   }
-})```
+})
