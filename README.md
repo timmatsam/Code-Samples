@@ -1,12 +1,13 @@
 <h3>This is a code sample from my ecommerce website project.</h3>
 
 ```js
+//GET cart data
 router.get('/', async (req, res) => {
   try {
-    const cart = await Order.findOne({
-      where: {isOrder: false, userId: req.user.id},
+    const cart = await Order.findOne({       where: {isOrder: false, userId: req.user.id},
       include: Product
-    })
+    })//order associated with user, that has not been checked out yet; order is associated with multiple products
+
     if (cart) {
       res.json(cart.Products)
     }
@@ -15,6 +16,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+//GET all orders associated with user
 router.get('/orders', async (req, res, next) => {
   try {
     const orders = await Order.findAll({
@@ -27,14 +29,18 @@ router.get('/orders', async (req, res, next) => {
   }
 })
 
+//POST a product to the cart
 router.post('/addProduct/:productId', async (req, res) => {
   try {
     const productId = req.params.productId
     const [order] = await Order.findOrCreate({
       where: {isOrder: false, userId: req.user.id}
-    })
+    })//if a cart does not exist, create one
     const product = await Product.findByPk(productId)
-    const price = product.price * 100
+    const price = product.price * 100 
+    
+    //determine if product is already in cart so that we can increment or
+    //decrement values associated with product
     const isProductInCart = await Order_Product.findOne({
       where: {ProductId: productId, OrderId: order.id}
     })
@@ -122,3 +128,5 @@ router.get('/checkout', async (req, res) => {
     res.sendStatus(error)
   }
 })
+
+
